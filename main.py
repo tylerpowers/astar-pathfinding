@@ -1,3 +1,7 @@
+# A-Star Pathfinding algorithm, made using tutorial by Tech with Tim on YT
+# 04-10-2022
+__author__ = 'tylerpowers'
+
 import pygame
 from queue import PriorityQueue
 
@@ -17,7 +21,7 @@ GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208)
 
 
-class Spot:
+class Spot:  # one square on the board
     def __init__(self, row, col, width, total_rows):
         self.row = row
         self.col = col
@@ -88,20 +92,20 @@ class Spot:
         return False
 
 
-def h(p1, p2):
+def h(p1, p2):  # heuristic function for position
     x1, y1 = p1
     x2, y2, = p2
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def reconstruct_path(came_from, current, draw):
+def reconstruct_path(came_from, current, draw):  # draws path
     while current in came_from:
         current = came_from[current]
         current.make_path()
         draw()
 
 
-def algorithm(draw, grid, start, end):
+def algorithm(draw, grid, start, end):  # a* algorithm that drives the program
     count = 0
     open_set = PriorityQueue()
     open_set.put((0, count, start))
@@ -145,7 +149,7 @@ def algorithm(draw, grid, start, end):
                     current.make_closed()
 
 
-def make_grid(rows, width):
+def make_grid(rows, width):  # makes grid as a 2-d array
     grid = []
     gap = width // rows
     for i in range(rows):
@@ -157,7 +161,7 @@ def make_grid(rows, width):
     return grid
 
 
-def draw_grid(win, rows, width):
+def draw_grid(win, rows, width):  # draws grid from previous function
     gap = width // rows
     for i in range(rows):
         pygame.draw.line(win, GREY, (0, i * gap), (width, i * gap))
@@ -165,7 +169,7 @@ def draw_grid(win, rows, width):
             pygame.draw.line(win, GREY, (j * gap, 0), (j * gap, width))
 
 
-def draw(win, grid, rows, width):
+def draw(win, grid, rows, width):  # draws each spot, calls draw_grid function
     win.fill(WHITE)
 
     for row in grid:
@@ -176,7 +180,7 @@ def draw(win, grid, rows, width):
     pygame.display.update()
 
 
-def get_clicked_pos(pos, rows, width):
+def get_clicked_pos(pos, rows, width):  # determines position of click
     gap = width // rows
     y, x = pos
 
@@ -186,7 +190,7 @@ def get_clicked_pos(pos, rows, width):
     return row, col
 
 
-def main(win, width):
+def main(win, width):  # main method that drives the program
     ROWS = 50
     grid = make_grid(ROWS, width)
 
@@ -245,5 +249,5 @@ def main(win, width):
     pygame.quit()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # main entry point
     main(WIN, WIDTH)
